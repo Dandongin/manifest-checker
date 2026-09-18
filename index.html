@@ -285,6 +285,7 @@
   td.col-name{font-weight:600;white-space:nowrap;}
   td.col-nat{font-family:var(--mono);color:var(--muted);width:52px;}
   td.col-pass{font-family:var(--mono);color:var(--ink);white-space:nowrap;}
+  td.col-addr{color:var(--ink);max-width:160px;}
   td.col-status{width:82px;font-weight:700;font-size:12px;letter-spacing:.02em;}
   .r-err td.col-status{color:var(--red);}
   .r-warn td.col-status{color:var(--amber);}
@@ -354,6 +355,7 @@
     <div class="rule"><b>중국인 (CN)</b>이름은 병음 규칙과 대조해 'WNAG'처럼 어긋난 표기가 있으면 의심 항목으로 표시.</div>
     <div class="rule"><b>여권번호</b>한국·중국 여권 발급 체계와 대조하고, 그 외 국적은 기본 형식만 확인합니다.</div>
     <div class="rule"><b>중복 검사</b>같은 여권 번호가 두 명 이상에게 있으면 오류로 표시합니다.</div>
+    <div class="rule"><b>주소</b>한글 주소가 아니거나(중국어 포함) 비어 있으면 오류로 표시합니다.</div>
   </div>
 
   <div class="filename-bar" id="filenameBar">
@@ -383,6 +385,7 @@
         <th class="col-name">성명</th>
         <th class="col-nat">국적</th>
         <th class="col-pass">여권번호</th>
+        <th class="col-addr">주소</th>
         <th class="col-status">상태</th>
         <th class="col-reason">사유</th>
       </tr>
@@ -566,17 +569,35 @@ function combineStatus(a, b){
   return rank[a] >= rank[b] ? a : b;
 }
 
-function evaluateRow(no, name, nat, passportNo, docType){
+// ---- address classification ----
+// CJK 한자 범위(중국어)는 한글(AC00-D7A3, 자모 1100-11FF/3130-318F)과 겹치지 않으므로
+// 이 범위가 섞여 있으면 중국어가 포함된 것으로 판단한다.
+const CJK_HAN_RE = /[\u4E00-\u9FFF\u3400-\u4DBF\uF900-\uFAFF]/;
+
+function evaluateAddress(address){
+  const a = (address||'').trim();
+  if(a.length === 0){
+    return {status:'err', reasons:['주소가 비어 있습니다.']};
+  }
+  if(CJK_HAN_RE.test(a)){
+    return {status:'err', reasons:['주소에 중국어(한자)가 포함되어 있습니다. 한글 주소로 입력해야 합니다.']};
+  }
+  return {status:'ok', reasons:[]};
+}
+
+function evaluateRow(no, name, nat, passportNo, docType, address){
   const nationality = (nat||'').trim().toUpperCase();
   const nameResult = evaluateName(name, nationality);
   const passResult = evaluatePassport(passportNo, nationality, docType);
+  const addrResult = evaluateAddress(address);
 
-  const status = combineStatus(nameResult.status, passResult.status);
-  const reasons = [...nameResult.reasons, ...passResult.reasons];
+  const status = combineStatus(combineStatus(nameResult.status, passResult.status), addrResult.status);
+  const reasons = [...nameResult.reasons, ...passResult.reasons, ...addrResult.reasons];
 
   return {
     no, name:(name||'').trim(), nat:nationality,
     passportNo:(passportNo||'').trim(), docType:(docType||'').trim(),
+    address:(address||'').trim(),
     status,
     reason: reasons.length ? reasons.join(' ') : '이상 없음',
     suggestHtml: nameResult.suggestHtml || ''
@@ -681,6 +702,7 @@ function processRows(rows){
   const natCol = header.findIndex(c => c.includes('국적'));
   const docTypeCol = header.findIndex(c => c.includes('여권') && c.includes('구분'));
   const passportCol = header.findIndex(c => c.includes('여권') && c.includes('번호') && !c.includes('구분'));
+  const addrCol = header.findIndex(c => c.includes('주소'));
 
   const results = [];
   let seq = 0;
@@ -693,8 +715,9 @@ function processRows(rows){
     const nat = natCol >= 0 ? String(row[natCol]||'') : '';
     const passportNo = passportCol >= 0 ? String(row[passportCol]||'') : '';
     const docType = docTypeCol >= 0 ? String(row[docTypeCol]||'') : '';
+    const address = addrCol >= 0 ? String(row[addrCol]||'') : '';
     if(name.trim() === '' && nat.trim() === '') continue;
-    results.push(evaluateRow(no, name, nat, passportNo, docType));
+    results.push(evaluateRow(no, name, nat, passportNo, docType, address));
   }
 
   if(passportCol >= 0) applyDuplicatePassportCheck(results);
@@ -727,6 +750,7 @@ function renderResults(){
       <td class="col-name">${escapeHtml(r.name)}</td>
       <td class="col-nat">${escapeHtml(r.nat)}</td>
       <td class="col-pass">${escapeHtml(r.passportNo)}</td>
+      <td class="col-addr">${escapeHtml(r.address)}</td>
       <td class="col-status">${statusLabel}</td>
       <td class="col-reason">${escapeHtml(r.reason)}${r.suggestHtml||''}</td>
     </tr>`;
@@ -755,12 +779,13 @@ document.getElementById('filterAll').addEventListener('click', function(){
 });
 
 document.getElementById('exportBtn').addEventListener('click', () => {
-  const header = ['순번','성명','국적','여권번호','상태','사유'];
+  const header = ['순번','성명','국적','여권번호','주소','상태','사유'];
   const statusMap = {err:'오류', warn:'의심', ok:'적합'};
   const lines = [header.join(',')];
   for(const r of currentResults){
     const reason = r.reason.replace(/"/g,'""');
-    lines.push([r.no, `"${r.name}"`, r.nat, r.passportNo, statusMap[r.status], `"${reason}"`].join(','));
+    const addr = String(r.address||'').replace(/"/g,'""');
+    lines.push([r.no, `"${r.name}"`, r.nat, r.passportNo, `"${addr}"`, statusMap[r.status], `"${reason}"`].join(','));
   }
   const csv = '\uFEFF' + lines.join('\n');
   const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
