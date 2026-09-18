@@ -349,15 +349,6 @@
     <input type="file" id="fileInput" accept=".xlsx,.xls">
   </div>
 
-  <div class="rules">
-    <div class="rule"><b>한국인 (KR)</b>이름은 한글로만 표기. 영문이 섞여 있으면 오류로 표시합니다.</div>
-    <div class="rule"><b>외국인</b>이름은 영문으로만 표기. </div>
-    <div class="rule"><b>중국인 (CN)</b>이름은 병음 규칙과 대조해 'WNAG'처럼 어긋난 표기가 있으면 의심 항목으로 표시.</div>
-    <div class="rule"><b>여권번호</b>한국·중국 여권 발급 체계와 대조하고, 그 외 국적은 기본 형식만 확인합니다.</div>
-    <div class="rule"><b>중복 검사</b>같은 여권 번호가 두 명 이상에게 있으면 오류로 표시합니다.</div>
-    <div class="rule"><b>주소</b>한글 주소가 아니거나(중국어 포함) 비어 있으면 오류로 표시합니다.</div>
-  </div>
-
   <div class="filename-bar" id="filenameBar">
     <span class="fname" id="filenameText"></span>
     <button id="resetBtn">다른 파일 선택</button>
@@ -399,6 +390,17 @@
 <footer class="note">
   병음 대조는 표준 한어병음 음절표(약 450여 개 음절)를 기준으로 하며, 흔한 오타(인접 글자 뒤바뀜)는 교정 제안을 함께 보여줍니다. 여권번호는 한·중 두 나라만 공식 발급 체계로 정밀 대조하며, 그 외 국적은 길이·문자 구성만 확인하는 기본 검사입니다. 실제 값이 드물게 표준 형식과 다를 수 있으니, 의심·오류 항목은 최종 판단 전 참고용으로만 활용해 주세요.
 </footer>
+
+<div class="wrap">
+  <div class="rules" style="margin:32px 0 40px;">
+    <div class="rule"><b>한국인 (KR)</b>이름은 한글로만 표기. 영문이 섞여 있으면 오류로 표시합니다.</div>
+    <div class="rule"><b>외국인</b>이름은 영문으로만 표기. </div>
+    <div class="rule"><b>중국인 (CN)</b>이름은 병음 규칙과 대조해 'WNAG'처럼 어긋난 표기가 있으면 의심 항목으로 표시.</div>
+    <div class="rule"><b>여권번호</b>한국·중국 여권 발급 체계와 대조하고, 그 외 국적은 기본 형식만 확인합니다.</div>
+    <div class="rule"><b>중복 검사</b>같은 여권 번호가 두 명 이상에게 있으면 오류로 표시합니다.</div>
+    <div class="rule"><b>주소</b>한글 주소가 아니거나(중국어 포함) 비어 있으면 오류로 표시합니다.</div>
+  </div>
+</div>
 
 <script>
 const PINYIN_SYLLABLES = ["a", "ai", "an", "ang", "ao", "ba", "bai", "ban", "bang", "bao", "bei", "ben", "beng", "bi", "bian", "biang", "biao", "bie", "bin", "bing", "bo", "bu", "ca", "cai", "can", "cang", "cao", "ce", "cei", "cen", "ceng", "cha", "chai", "chan", "chang", "chao", "che", "chen", "cheng", "chi", "chong", "chou", "chu", "chua", "chuai", "chuan", "chuang", "chui", "chun", "chuo", "ci", "cong", "cou", "cu", "cuan", "cui", "cun", "cuo", "da", "dai", "dan", "dang", "dao", "de", "dei", "den", "deng", "di", "dia", "dian", "diang", "diao", "die", "din", "ding", "diu", "dong", "dou", "du", "duan", "duang", "dui", "dun", "duo", "e", "ei", "en", "eng", "er", "fa", "fai", "fan", "fang", "fei", "fen", "feng", "fiao", "fo", "fou", "fu", "ga", "gai", "gan", "gang", "gao", "ge", "gei", "gen", "geng", "gin", "ging", "gong", "gou", "gu", "gua", "guai", "guan", "guang", "gui", "gun", "guo", "ha", "hai", "han", "hang", "hao", "he", "hei", "hen", "heng", "hm", "hng", "hong", "hou", "hu", "hua", "huai", "huan", "huang", "hui", "hun", "huo", "i", "ia", "iai", "ian", "iang", "iao", "ie", "in", "ing", "io", "iong", "iu", "ji", "jia", "jian", "jiang", "jiao", "jie", "jin", "jing", "jiong", "jiu", "ju", "juan", "jue", "jun", "ka", "kai", "kan", "kang", "kao", "ke", "kei", "ken", "keng", "kiang", "kiu", "kong", "kou", "ku", "kua", "kuai", "kuan", "kuang", "kui", "kun", "kuo", "la", "lai", "lan", "lang", "lao", "le", "lei", "len", "leng", "li", "lia", "lian", "liang", "liao", "lie", "lin", "ling", "liu", "lo", "long", "lou", "lu", "luan", "lue", "lun", "luo", "lv", "lvan", "lve", "lvn", "lyu", "m", "ma", "mai", "man", "mang", "mao", "me", "mei", "men", "meng", "mi", "mian", "miao", "mie", "min", "ming", "miu", "mo", "mou", "mu", "n", "na", "nai", "nan", "nang", "nao", "ne", "nei", "nen", "neng", "ng", "ni", "nia", "nian", "niang", "niao", "nie", "nin", "ning", "niu", "nong", "nou", "nu", "nuan", "nue", "nui", "nun", "nuo", "nv", "nve", "nyu", "o", "ong", "ou", "pa", "pai", "pan", "pang", "pao", "pei", "pen", "peng", "pi", "pia", "pian", "piao", "pie", "pin", "ping", "po", "pou", "pu", "pun", "qi", "qia", "qian", "qiang", "qiao", "qie", "qin", "qing", "qiong", "qiu", "qu", "quan", "que", "qun", "ran", "rang", "rao", "re", "ren", "reng", "ri", "rong", "rou", "ru", "rua", "ruan", "rui", "run", "ruo", "sa", "sai", "san", "sang", "sao", "se", "sei", "sen", "seng", "sha", "shai", "shan", "shang", "shao", "she", "shei", "shen", "sheng", "shi", "shou", "shu", "shua", "shuai", "shuan", "shuang", "shui", "shun", "shuo", "si", "song", "sou", "su", "suan", "sui", "sun", "suo", "ta", "tai", "tan", "tang", "tao", "te", "tei", "teng", "ti", "tian", "tiao", "tie", "ting", "tong", "tou", "tu", "tuan", "tui", "tun", "tuo", "u", "ua", "uai", "uan", "uang", "ui", "un", "uo", "v", "wa", "wai", "wan", "wang", "wei", "wen", "weng", "wo", "wu", "xi", "xia", "xian", "xiang", "xiao", "xie", "xin", "xing", "xiong", "xiu", "xu", "xuan", "xue", "xun", "ya", "yai", "yan", "yang", "yao", "ye", "yi", "yin", "ying", "yo", "yong", "you", "yu", "yuan", "yue", "yun", "za", "zai", "zan", "zang", "zao", "ze", "zei", "zen", "zeng", "zha", "zhai", "zhan", "zhang", "zhao", "zhe", "zhei", "zhen", "zheng", "zhi", "zhong", "zhou", "zhu", "zhua", "zhuai", "zhuan", "zhuang", "zhui", "zhun", "zhuo", "zi", "zong", "zou", "zu", "zuan", "zui", "zun", "zuo"];
