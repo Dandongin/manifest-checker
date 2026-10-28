@@ -403,7 +403,7 @@
 </div>
 
 <script>
-const PINYIN_SYLLABLES = ["a", "ai", "an", "ang", "ao", "ba", "bai", "ban", "bang", "bao", "bei", "ben", "beng", "bi", "bian", "biang", "biao", "bie", "bin", "bing", "bo", "bu", "ca", "cai", "can", "cang", "cao", "ce", "cei", "cen", "ceng", "cha", "chai", "chan", "chang", "chao", "che", "chen", "cheng", "chi", "chong", "chou", "chu", "chua", "chuai", "chuan", "chuang", "chui", "chun", "chuo", "ci", "cong", "cou", "cu", "cuan", "cui", "cun", "cuo", "da", "dai", "dan", "dang", "dao", "de", "dei", "den", "deng", "di", "dia", "dian", "diang", "diao", "die", "din", "ding", "diu", "dong", "dou", "du", "duan", "duang", "dui", "dun", "duo", "e", "ei", "en", "eng", "er", "fa", "fai", "fan", "fang", "fei", "fen", "feng", "fiao", "fo", "fou", "fu", "ga", "gai", "gan", "gang", "gao", "ge", "gei", "gen", "geng", "gin", "ging", "gong", "gou", "gu", "gua", "guai", "guan", "guang", "gui", "gun", "guo", "ha", "hai", "han", "hang", "hao", "he", "hei", "hen", "heng", "hm", "hng", "hong", "hou", "hu", "hua", "huai", "huan", "huang", "hui", "hun", "huo", "i", "ia", "iai", "ian", "iang", "iao", "ie", "in", "ing", "io", "iong", "iu", "ji", "jia", "jian", "jiang", "jiao", "jie", "jin", "jing", "jiong", "jiu", "ju", "juan", "jue", "jun", "ka", "kai", "kan", "kang", "kao", "ke", "kei", "ken", "keng", "kiang", "kiu", "kong", "kou", "ku", "kua", "kuai", "kuan", "kuang", "kui", "kun", "kuo", "la", "lai", "lan", "lang", "lao", "le", "lei", "len", "leng", "li", "lia", "lian", "liang", "liao", "lie", "lin", "ling", "liu", "lo", "long", "lou", "lu", "luan", "lue", "lun", "luo", "lv", "lvan", "lve", "lvn", "lyu", "m", "ma", "mai", "man", "mang", "mao", "me", "mei", "men", "meng", "mi", "mian", "miao", "mie", "min", "ming", "miu", "mo", "mou", "mu", "n", "na", "nai", "nan", "nang", "nao", "ne", "nei", "nen", "neng", "ng", "ni", "nia", "nian", "niang", "niao", "nie", "nin", "ning", "niu", "nong", "nou", "nu", "nuan", "nue", "nui", "nun", "nuo", "nv", "nve", "nyu", "o", "ong", "ou", "pa", "pai", "pan", "pang", "pao", "pei", "pen", "peng", "pi", "pia", "pian", "piao", "pie", "pin", "ping", "po", "pou", "pu", "pun", "qi", "qia", "qian", "qiang", "qiao", "qie", "qin", "qing", "qiong", "qiu", "qu", "quan", "que", "qun", "ran", "rang", "rao", "re", "ren", "reng", "ri", "rong", "rou", "ru", "rua", "ruan", "rui", "run", "ruo", "sa", "sai", "san", "sang", "sao", "se", "sei", "sen", "seng", "sha", "shai", "shan", "shang", "shao", "she", "shei", "shen", "sheng", "shi", "shou", "shu", "shua", "shuai", "shuan", "shuang", "shui", "shun", "shuo", "si", "song", "sou", "su", "suan", "sui", "sun", "suo", "ta", "tai", "tan", "tang", "tao", "te", "tei", "teng", "ti", "tian", "tiao", "tie", "ting", "tong", "tou", "tu", "tuan", "tui", "tun", "tuo", "u", "ua", "uai", "uan", "uang", "ui", "un", "uo", "v", "wa", "wai", "wan", "wang", "wei", "wen", "weng", "wo", "wu", "xi", "xia", "xian", "xiang", "xiao", "xie", "xin", "xing", "xiong", "xiu", "xu", "xuan", "xue", "xun", "ya", "yai", "yan", "yang", "yao", "ye", "yi", "yin", "ying", "yo", "yong", "you", "yu", "yuan", "yue", "yun", "za", "zai", "zan", "zang", "zao", "ze", "zei", "zen", "zeng", "zha", "zhai", "zhan", "zhang", "zhao", "zhe", "zhei", "zhen", "zheng", "zhi", "zhong", "zhou", "zhu", "zhua", "zhuai", "zhuan", "zhuang", "zhui", "zhun", "zhuo", "zi", "zong", "zou", "zu", "zuan", "zui", "zun", "zuo"];
+const PINYIN_SYLLABLES = ["a", "ai", "an", "ang", "ao", "ba", "bai", "ban", "bang", "bao", "bei", "ben", "beng", "bi", "bian", "biang", "biao", "bie", "bin", "bing", "bo", "bu", "ca", "cai", "can", "cang", "cao", "ce", "cei", "cen", "ceng", "cha", "chai", "chan", "chang", "chao", "che", "chen", "cheng", "chi", "chong", "chou", "chu", "chua", "chuai", "chuan", "chuang", "chui", "chun", "chuo", "ci", "cong", "cou", "cu", "cuan", "cui", "cun", "cuo", "da", "dai", "dan", "dang", "dao", "de", "dei", "den", "deng", "di", "dia", "dian", "diang", "diao", "die", "din", "ding", "diu", "dong", "dou", "du", "duan", "duang", "dui", "dun", "duo", "e", "ei", "en", "eng", "er", "fa", "fai", "fan", "fang", "fei", "fen", "feng", "fo", "fou", "fu", "ga", "gai", "gan", "gang", "gao", "ge", "gei", "gen", "geng", "gong", "gou", "gu", "gua", "guai", "guan", "guang", "gui", "gun", "guo", "ha", "hai", "han", "hang", "hao", "he", "hei", "hen", "heng", "hong", "hou", "hu", "hua", "huai", "huan", "huang", "hui", "hun", "huo", "ji", "jia", "jian", "jiang", "jiao", "jie", "jin", "jing", "jiong", "jiu", "ju", "juan", "jue", "jun", "ka", "kai", "kan", "kang", "kao", "ke", "kei", "ken", "keng", "kong", "kou", "ku", "kua", "kuai", "kuan", "kuang", "kui", "kun", "kuo", "la", "lai", "lan", "lang", "lao", "le", "lei", "len", "leng", "li", "lia", "lian", "liang", "liao", "lie", "lin", "ling", "liu", "lo", "long", "lou", "lu", "luan", "lue", "lun", "luo", "lv", "lvan", "lve", "lvn", "lyu", "ma", "mai", "man", "mang", "mao", "me", "mei", "men", "meng", "mi", "mian", "miao", "mie", "min", "ming", "miu", "mo", "mou", "mu", "na", "nai", "nan", "nang", "nao", "ne", "nei", "nen", "neng", "ni", "nia", "nian", "niang", "niao", "nie", "nin", "ning", "niu", "nong", "nou", "nu", "nuan", "nue", "nui", "nun", "nuo", "nv", "nve", "nyu", "o", "ong", "ou", "pa", "pai", "pan", "pang", "pao", "pei", "pen", "peng", "pi", "pia", "pian", "piao", "pie", "pin", "ping", "po", "pou", "pu", "pun", "qi", "qia", "qian", "qiang", "qiao", "qie", "qin", "qing", "qiong", "qiu", "qu", "quan", "que", "qun", "ran", "rang", "rao", "re", "ren", "reng", "ri", "rong", "rou", "ru", "rua", "ruan", "rui", "run", "ruo", "sa", "sai", "san", "sang", "sao", "se", "sei", "sen", "seng", "sha", "shai", "shan", "shang", "shao", "she", "shei", "shen", "sheng", "shi", "shou", "shu", "shua", "shuai", "shuan", "shuang", "shui", "shun", "shuo", "si", "song", "sou", "su", "suan", "sui", "sun", "suo", "ta", "tai", "tan", "tang", "tao", "te", "tei", "teng", "ti", "tian", "tiao", "tie", "ting", "tong", "tou", "tu", "tuan", "tui", "tun", "tuo", "wa", "wai", "wan", "wang", "wei", "wen", "weng", "wo", "wu", "xi", "xia", "xian", "xiang", "xiao", "xie", "xin", "xing", "xiong", "xiu", "xu", "xuan", "xue", "xun", "ya", "yai", "yan", "yang", "yao", "ye", "yi", "yin", "ying", "yo", "yong", "you", "yu", "yuan", "yue", "yun", "za", "zai", "zan", "zang", "zao", "ze", "zei", "zen", "zeng", "zha", "zhai", "zhan", "zhang", "zhao", "zhe", "zhei", "zhen", "zheng", "zhi", "zhong", "zhou", "zhu", "zhua", "zhuai", "zhuan", "zhuang", "zhui", "zhun", "zhuo", "zi", "zong", "zou", "zu", "zuan", "zui", "zun", "zuo"];
 const SYLLABLE_SET = new Set(PINYIN_SYLLABLES);
 const MAX_SYL_LEN = 6;
 
@@ -422,36 +422,60 @@ function canSegment(word){
   return dp[n];
 }
 
-// try adjacent-letter transposition to find a plausible correction.
-// only accept a swap that turns the word into a SINGLE valid syllable —
-// a swap that merely happens to segment into multiple tiny syllables
-// (e.g. "hia" -> "iha" = "i"+"ha") is usually not a real name and is
-// more misleading than helpful, so it is intentionally rejected here.
-function suggestCorrection(word){
+// ---- 성(姓) 검사 ----
+// 중국 성씨는 거의 모두 병음 1음절이며, 복성(두 음절)은 아래 목록뿐입니다.
+// "OUAN" 처럼 OU+AN 으로 쪼개져서 분해 검사를 통과하는 오타를 잡기 위해
+// 성명의 첫 단어(성)는 '1음절' 또는 '복성 목록'일 때만 정상으로 봅니다.
+const COMPOUND_SURNAMES = new Set(["ouyang","sima","zhuge","shangguan","xiahou","huangfu","weichi","gongsun","murong","dugu","linghu","zhongli","yuchi","situ","sikong","ximen","dongfang","nangong","tuoba","xuanyuan","zhangsun","yuwen","changsun","shentu","duanmu","gongye","gongyang","liangqiu","zuoqiu","dongguo","nanmen","baili","dongmen","helian","huyan","wanyan","taishu","nalan","zhongsun","gongxi","shusun","zhuansun","gongliang","zhongsun","lingzhi"]);
+
+// 글자 모양/타이핑이 비슷해 자주 틀리는 글자 (예: O ↔ Q, D)
+const CONFUSABLE = {o:'qdgc', q:'og', d:'oq', g:'cqo', c:'go', i:'lj', l:'i', u:'v', v:'u', m:'n', n:'m'};
+
+// 오타 교정 후보: (1) 인접 글자 뒤바뀜 (2) 비슷하게 생긴 글자로 교체.
+// 결과가 '정상 병음 1음절'이 되는 것만 후보로 하고 최대 3개까지.
+function suggestCandidates(word){
   const w = word.toLowerCase();
+  const out = [];
+  const add = s => {
+    const u = s.toUpperCase();
+    if(SYLLABLE_SET.has(s) && u !== w.toUpperCase() && !out.includes(u)) out.push(u);
+  };
   for(let i=0;i<w.length-1;i++){
     if(w[i] === w[i+1]) continue;
-    const swapped = w.slice(0,i) + w[i+1] + w[i] + w.slice(i+2);
-    if(SYLLABLE_SET.has(swapped)){
-      return swapped.toUpperCase();
-    }
+    add(w.slice(0,i) + w[i+1] + w[i] + w.slice(i+2));
   }
-  return null;
+  for(let i=0;i<w.length;i++){
+    const alts = CONFUSABLE[w[i]] || '';
+    for(const c of alts) add(w.slice(0,i) + c + w.slice(i+1));
+  }
+  return out.slice(0,3);
+}
+
+function suggestCorrection(word){
+  const c = suggestCandidates(word);
+  return c.length ? c.join(' / ') : null;
+}
+
+function isValidSurname(word){
+  const w = word.toLowerCase();
+  return SYLLABLE_SET.has(w) || COMPOUND_SURNAMES.has(w);
 }
 
 function checkPinyinName(fullName){
   const words = fullName.trim().split(/\s+/).filter(Boolean);
   const badWords = [];
   const suggestions = [];
-  for(const w of words){
+  words.forEach((w, idx) => {
     const letters = w.replace(/[^A-Za-z]/g,'');
-    if(letters.length === 0) continue;
-    if(!canSegment(letters)){
+    if(letters.length === 0) return;
+    // 이름이 2단어 이상이면 첫 단어는 '성' → 1음절/복성이어야 함. 그 외 단어는 음절 분해로 검사.
+    const ok = (words.length >= 2 && idx === 0) ? isValidSurname(letters) : canSegment(letters);
+    if(!ok){
       badWords.push(w);
       const s = suggestCorrection(letters);
       if(s) suggestions.push({original:w, suggestion:s});
     }
-  }
+  });
   return {badWords, suggestions};
 }
 
