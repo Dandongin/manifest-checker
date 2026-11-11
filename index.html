@@ -395,7 +395,7 @@
   <div class="rules" style="margin:32px 0 40px;">
     <div class="rule"><b>한국인 (KR)</b>이름은 한글로만 표기. 영문이 섞여 있으면 오류로 표시합니다.</div>
     <div class="rule"><b>외국인</b>이름은 영문으로만 표기. </div>
-    <div class="rule"><b>중국인 (CN)</b>이름은 병음 규칙과 대조해 'WNAG'처럼 어긋난 표기가 있으면 의심 항목으로 표시.</div>
+    <div class="rule"><b>중국인 (CN)</b>이름은 병음 규칙과 대조해 'WNAG'처럼 어긋난 표기가 있으면 의심 항목으로 표시. 성 다음에 띄어쓰기가 없으면 오류로 표시합니다.</div>
     <div class="rule"><b>여권번호</b>한국·중국 여권 발급 체계와 대조하고, 그 외 국적은 기본 형식만 확인합니다.</div>
     <div class="rule"><b>중복 검사</b>같은 여권 번호가 두 명 이상에게 있으면 오류로 표시합니다.</div>
     <div class="rule"><b>주소</b>한글 주소가 아니거나(중국어 포함) 비어 있으면 오류로 표시합니다.</div>
@@ -519,6 +519,9 @@ function evaluateName(name, nationality){
     } else if(!hasLatin){
       status = 'err';
       reasons.push('영문 이름을 식별할 수 없습니다.');
+    } else if(nationality === 'CN' && !/\s/.test(n)){
+      status = 'err';
+      reasons.push('중국인 이름은 성 다음에 띄어쓰기가 있어야 합니다. (예: WANG WEI)');
     } else if(nationality === 'CN'){
       const {badWords, suggestions} = checkPinyinName(n);
       if(badWords.length > 0){
